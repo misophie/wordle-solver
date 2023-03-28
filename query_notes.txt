@@ -1,0 +1,1 @@
+s(_, _, X, _, _, _), string_length(X, 5). in wn_s.pl returns all words that have a string length of 5
