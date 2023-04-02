@@ -13,3 +13,6 @@ green(Letter, Index, Word) :- five_letter_words(Word), sub_string(Word, Index, 1
 % do not contain those letters at any position. these are letters we
 % know don't appear in any position in the word.
 notcontain(Letters,Word) :- five_letter_words(Word), forall(member(Letter,Letters),not(sub_string(Word, _, 1, _, Letter))).
+
+% yellow(Letter, Index, Word) is true if the Word contains the letter but not at that index
+yellow(Letter, Index, Word) :- five_letter_words(Word), sub_string(Word, _, 1, _, Letter), not(sub_string(Word, Index, 1, _, Letter)).
