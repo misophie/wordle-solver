@@ -12,10 +12,15 @@ green(Letter, Index, Word) :- sub_string(Word, Index, 1, _, Letter1), Letter1 ==
 % yellow(Letter, Index, Word) is true if the Word contains the letter but not at that index
 yellow(Letter, Index, Word) :- sub_string(Word, _, 1, _, Letter), not(sub_string(Word, Index, 1, _, Letter)).
 
+% notcontain takes a letter and returns all the five-letter words that 
+% do not contain that letter at any position. this is a letter we
+% know don't appear in any position in the word.
+notcontain(Letter, Word) :- not(sub_string(Word, _, 1, _, Letter)).
+
 % notcontain takes a list of letters and returns all the five-letter words that 
 % do not contain those letters at any position. these are letters we
 % know don't appear in any position in the word.
-notcontain(Letters,Word) :- forall(member(Letter,Letters),not(sub_string(Word, _, 1, _, Letter))).
+% notcontain(Letters,Word) :- forall(member(Letter,Letters),not(sub_string(Word, _, 1, _, Letter))).
 
 % query that combines all of the above
 % solve takes a list of letters, list of indices, list of types (0 = green, 1 = yellow, 2 = notcontain)
