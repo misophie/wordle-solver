@@ -39,3 +39,20 @@ solve([Letter | Letters], [Index | Indices], [-1 | Types], Word) :- five_letter_
 solve([Letter | Letters], [Index | Indices], [0 | Types], Word) :- green(Letter, Index, Word), solve(Letters, Indices, Types, Word).
 solve([Letter | Letters], [Index | Indices], [1 | Types], Word) :- yellow(Letter, Index, Word), solve(Letters, Indices, Types, Word).
 solve([Letter | Letters], [Index | Indices], [2 | Types], Word) :- notcontain(Letter, Word), solve(Letters, Indices, Types, Word).
+
+q(Ans) :-
+    write("What are the letters you have currently guessed?: "), flush_output(current_output), 
+    read_line_to_string(user_input, Lt), 
+    split_string(Lt, " -", " ,?.!-", Ln_Lt), % ignore punctuation
+    write("What was the type of each letter? Type: \n 0 -> Green \n 1 -> Yellow \n 2 -> Grey/Word does not contain the letter\n"),
+    read_line_to_string(user_input, Ty),
+    split_string(Ty, " -", " ,?.!-", Ln_Ty),
+    maplist(string_to_atom, Ln_Ty, N_Ty), % convert list of substrings to list of atoms (int?)
+    write(N_Ty), % debug remove later
+    write("If the letter was green or yellow, add the index of your guess: "),
+    read_line_to_string(user_input, Id),
+    split_string(Id, " -", " ,?.!-", Ln_Id),
+    maplist(string_to_atom, Ln_Id, N_Id),
+    solve(Ln_Lt, N_Id, [-1|N_Ty], Word).
+q(Ans) :-
+    write("No more answers\n Call q(Ans) to go again."). % try to use a y/n option for continuing
