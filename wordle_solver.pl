@@ -10,7 +10,10 @@ five_letter_words(X) :- s(_, _, X, _, _, _), string_length(X, 5).
 % green takes a letter and the corresponding index to the letter
 % this is a letter you KNOW is in the word at that particular index
 % green gives all 5 letter words that contain that letter at that particular index
-green(Letter, Index, Word) :- sub_string(Word, Index, 1, _, Letter1), Letter1 == Letter.
+
+% text_to_string was added because of the comparison between letters (Letter1 == Letter) doesn't work 
+% if the input isn't explicitly surrounded by quotation marks
+green(Letter, Index, Word) :- text_to_string(Letter, Letter2), sub_string(Word, Index, 1, _, Letter1), Letter1 == Letter2.
 
 % yellow(Letter, Index, Word) is true if the Word contains the letter but not at that index
 yellow(Letter, Index, Word) :- sub_string(Word, _, 1, _, Letter), not(sub_string(Word, Index, 1, _, Letter)).
