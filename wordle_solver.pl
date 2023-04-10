@@ -18,12 +18,12 @@ yellow(Letter, Index, Word) :- sub_string(Word, _, 1, _, Letter), not(sub_string
 % notcontain takes a letter and returns all the five-letter words that 
 % do not contain that letter at any position. this is a letter we
 % know don't appear in any position in the word.
-notcontain(Letter, Word) :- not(sub_string(Word, _, 1, _, Letter)).
+% notcontain(Letter, Word) :- not(sub_string(Word, _, 1, _, Letter)).
 
 % notcontain takes a list of letters and returns all the five-letter words that 
 % do not contain those letters at any position. these are letters we
 % know don't appear in any position in the word.
-% notcontain(Letters,Word) :- forall(member(Letter,Letters),not(sub_string(Word, _, 1, _, Letter))).
+notcontain(Letters,Word) :- forall(member(Letter,Letters),not(sub_string(Word, _, 1, _, Letter))).
 
 % query that combines all of the above
 % solve takes a list of letters, list of indices, list of types (-1 = initialize, 0 = green, 1 = yellow, 2 = notcontain)
@@ -42,17 +42,22 @@ solve([Letter | Letters], [Index | Indices], [2 | Types], Word) :- notcontain(Le
 
 q(Ans) :-
     write("What are the letters you have currently guessed?: "), flush_output(current_output), 
-    read_line_to_string(user_input, Lt), 
-    split_string(Lt, " -", " ,?.!-", Ln_Lt), % ignore punctuation
+    read_line_to_string(user_input, Letters), 
+    split_string(Letters, ",", " ", Lts), % ignore punctuation
+    % write(Lts),
     write("What was the type of each letter? Type: \n 0 -> Green \n 1 -> Yellow \n 2 -> Grey/Word does not contain the letter\n"),
-    read_line_to_string(user_input, Ty),
-    split_string(Ty, " -", " ,?.!-", Ln_Ty),
-    maplist(string_to_atom, Ln_Ty, N_Ty), % convert list of substrings to list of atoms (int?)
-    write(N_Ty), % debug remove later
-    write("If the letter was green or yellow, add the index of your guess: "),
+    read_line_to_string(user_input, Types),
+    split_string(Types, ",", " ", Tys),
+    % write(Tys),
+    maplist(number_string, Typenos, Tys), % convert list of substrings to list of atoms (int?)
+    % foldl(plus, Typenos, 0, N),
+    % write(N), % debug remove later
+    write("\nAdd the index of each letter in your guess: "),
     read_line_to_string(user_input, Id),
-    split_string(Id, " -", " ,?.!-", Ln_Id),
-    maplist(string_to_atom, Ln_Id, N_Id),
-    solve(Ln_Lt, N_Id, [-1|N_Ty], Word).
+    split_string(Id, ",", " ", Indices),
+    maplist(number_string, Indexnos, Indices),
+    solve([x|Lts], [0|Indexnos], [-1|Typenos], Word),
+    write("\n \n Try the word: "),
+    write(Word).
 q(Ans) :-
     write("No more answers\n Call q(Ans) to go again."). % try to use a y/n option for continuing
