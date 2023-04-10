@@ -40,18 +40,26 @@ solve([Letter | Letters], [Index | Indices], [0 | Types], Word) :- green(Letter,
 solve([Letter | Letters], [Index | Indices], [1 | Types], Word) :- yellow(Letter, Index, Word), solve(Letters, Indices, Types, Word).
 solve([Letter | Letters], [Index | Indices], [2 | Types], Word) :- notcontain(Letter, Word), solve(Letters, Indices, Types, Word).
 
+q(Ans) :- 
+    write("Have you guessed a word yet? (y/n) "), flush_output(current_output),
+    read_line_to_string(user_input, Ans),
+    q1(Ans).
 q(Ans) :-
-    write("What are the letters you have currently guessed?: "), flush_output(current_output), 
+    write("No more answers\n Call q(Ans) to go again."). % try to use a y/n option for continuing
+
+q1("n") :-
+    solve([x], [0], [-1], Word), flush_output(current_output),
+    write("\n\n Try the word: "),
+    write(Word).
+
+q1("y") :-
+    write("\nWhat are the letters you have currently guessed?: "), flush_output(current_output), 
     read_line_to_string(user_input, Letters), 
     split_string(Letters, ",", " ", Lts), % ignore punctuation
-    % write(Lts),
     write("What was the type of each letter? Type: \n 0 -> Green \n 1 -> Yellow \n 2 -> Grey/Word does not contain the letter\n"),
     read_line_to_string(user_input, Types),
     split_string(Types, ",", " ", Tys),
-    % write(Tys),
     maplist(number_string, Typenos, Tys), % convert list of substrings to list of atoms (int?)
-    % foldl(plus, Typenos, 0, N),
-    % write(N), % debug remove later
     write("\nAdd the index of each letter in your guess: "),
     read_line_to_string(user_input, Id),
     split_string(Id, ",", " ", Indices),
@@ -59,5 +67,3 @@ q(Ans) :-
     solve([x|Lts], [0|Indexnos], [-1|Typenos], Word),
     write("\n \n Try the word: "),
     write(Word).
-q(Ans) :-
-    write("No more answers\n Call q(Ans) to go again."). % try to use a y/n option for continuing
