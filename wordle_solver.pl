@@ -56,14 +56,14 @@ q1("n") :-
     write(Word).
 
 q1("y") :-
-    write("\nWhat are the letters you have currently guessed?: "), flush_output(current_output), 
+    write("\nWhat are the letters you have currently guessed? \n (add letters seperated by a comma): \n "), flush_output(current_output), 
     read_line_to_string(user_input, Letters), 
     split_string(Letters, ",", " ", Lts), % ignore punctuation
-    write("What was the type of each letter? Type: \n 0 -> Green \n 1 -> Yellow \n 2 -> Grey/Word does not contain the letter\n"),
+    write("What was the type of each letter? Type: \n 0 -> Green \n 1 -> Yellow \n 2 -> Grey/Word does not contain the letter\n(add numbers seperated by a comma)\n"),
     read_line_to_string(user_input, Types),
     split_string(Types, ",", " ", Tys),
     maplist(number_string, Typenos, Tys), % convert list of substrings to list of atoms (int?)
-    write("\nAdd the index of each letter in your guess: "),
+    write("\nAdd the index of each letter in your guess (add numbers seperated by a comma): "),
     read_line_to_string(user_input, Id),
     split_string(Id, ",", " ", Indices),
     maplist(number_string, Indexnos, Indices),
